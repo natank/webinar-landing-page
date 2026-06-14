@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI-Assisted Software Development — וובינר</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --accent: #58a6ff;
+      --accent2: #3fb950;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --gradient: linear-gradient(135deg, #1f6feb 0%, #388bfd 100%);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.9rem 2rem;
+      background: rgba(13,17,23,0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.02em;
+    }
+    .nav-cta {
+      display: inline-block;
+      padding: 0.45rem 1.2rem;
+      background: var(--gradient);
+      color: #fff;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: opacity 0.2s;
+    }
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      padding: 7rem 1.5rem 6rem;
+      text-align: center;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(31,111,235,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .badge {
+      display: inline-block;
+      margin-bottom: 1.5rem;
+      padding: 0.3rem 1rem;
+      background: rgba(88,166,255,0.12);
+      border: 1px solid rgba(88,166,255,0.35);
+      border-radius: 999px;
+      font-size: 0.82rem;
+      color: var(--accent);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+      color: #fff;
+    }
+    .hero h1 span { color: var(--accent); }
+    .hero-sub {
+      font-size: clamp(1.05rem, 2vw, 1.25rem);
+      color: var(--muted);
+      max-width: 640px;
+      margin: 1rem auto 2.5rem;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      display: inline-block;
+      padding: 0.85rem 2.2rem;
+      background: var(--gradient);
+      color: #fff;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.05rem;
+      transition: transform 0.15s, opacity 0.15s;
+      box-shadow: 0 4px 24px rgba(31,111,235,0.35);
+    }
+    .btn-primary:hover { transform: translateY(-2px); opacity: 0.92; }
+    .btn-secondary {
+      display: inline-block;
+      padding: 0.85rem 2.2rem;
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.05rem;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-secondary:hover { border-color: var(--accent); background: rgba(88,166,255,0.06); }
+
+    /* ── META BAR ── */
+    .meta-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      padding: 1.5rem 1rem;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+    .meta-item strong { color: var(--text); }
+    .meta-icon { font-size: 1.1rem; }
+
+    /* ── SECTIONS ── */
+    section { padding: 5rem 1.5rem; }
+    .container { max-width: 900px; margin: 0 auto; }
+    .section-label {
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+    }
+    h2 {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: #fff;
+    }
+    .lead {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 680px;
+      margin-bottom: 2.5rem;
+    }
+
+    /* ── HOOKS GRID ── */
+    .hooks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.25rem;
+    }
+    .hook-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .hook-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .hook-icon { font-size: 1.8rem; margin-bottom: 0.75rem; }
+    .hook-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; color: #fff; }
+    .hook-card p { font-size: 0.9rem; color: var(--muted); }
+
+    /* ── AGENDA ── */
+    .agenda-list { list-style: none; display: flex; flex-direction: column; gap: 0.9rem; }
+    .agenda-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+    }
+    .agenda-num {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 2rem;
+      height: 2rem;
+      background: var(--gradient);
+      border-radius: 50%;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .agenda-text strong { display: block; font-size: 0.97rem; color: #fff; }
+    .agenda-text span { font-size: 0.87rem; color: var(--muted); }
+
+    /* ── FOR WHOM ── */
+    .audience-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+    .audience-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.4rem;
+      text-align: center;
+    }
+    .audience-card .icon { font-size: 2rem; margin-bottom: 0.6rem; }
+    .audience-card h3 { font-size: 0.97rem; font-weight: 700; color: #fff; margin-bottom: 0.3rem; }
+    .audience-card p { font-size: 0.87rem; color: var(--muted); }
+
+    /* ── DIVIDER ── */
+    .divider { border: none; border-top: 1px solid var(--border); margin: 0; }
+
+    /* ── REGISTER ── */
+    #register { background: var(--surface); }
+    .register-box {
+      max-width: 580px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .register-box p {
+      color: var(--muted);
+      margin-bottom: 2rem;
+      font-size: 1rem;
+    }
+    .register-link {
+      display: inline-block;
+      padding: 1rem 2.8rem;
+      background: var(--gradient);
+      color: #fff;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 28px rgba(31,111,235,0.4);
+      transition: transform 0.15s, opacity 0.15s;
+    }
+    .register-link:hover { transform: translateY(-2px); opacity: 0.9; }
+    .register-note {
+      margin-top: 1.2rem;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    /* ── HIGHLIGHT ── */
+    .highlight { color: var(--accent2); font-weight: 700; }
+
+    @media (max-width: 600px) {
+      nav { padding: 0.8rem 1rem; }
+      .hero { padding: 5rem 1rem 4rem; }
+      section { padding: 3.5rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <span class="nav-logo">AI-Assisted Dev</span>
+    <a href="#register" class="nav-cta">הרשמה לוובינר</a>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="badge">וובינר חינמי · Online</div>
+    <h1>AI-Assisted<br /><span>Software Development</span></h1>
+    <p class="hero-sub">
+      למד לפתח תוכנה ברמת מהנדס בכיר — עם עזרת AI — מהיום הראשון.
+    </p>
+    <div class="hero-actions">
+      <a href="#register" class="btn-primary">הרשמה חינמית</a>
+      <a href="#agenda" class="btn-secondary">מה נלמד?</a>
+    </div>
+  </header>
+
+  <!-- META BAR -->
+  <div class="meta-bar">
+    <div class="meta-item">
+      <span class="meta-icon">📅</span>
+      <span><strong>תאריך</strong> — בקרוב</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-icon">🕐</span>
+      <span><strong>משך</strong> — כשעה</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-icon">💻</span>
+      <span><strong>פורמט</strong> — אונליין, לייב</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-icon">🆓</span>
+      <span><strong>עלות</strong> — חינם לחלוטין</span>
+    </div>
+  </div>
+
+  <!-- WHY -->
+  <section id="why">
+    <div class="container">
+      <p class="section-label">למה זה חשוב</p>
+      <h2>AI שינה את כללי המשחק — האם אתם מוכנים?</h2>
+      <p class="lead">
+        AI אינו מחליף מפתחים — הוא מגביר את כוחם. מי שיודע לעבוד נכון עם AI
+        יספיק בחצי הזמן מה שהיה לוקח לצוות שלם. הוובינר הזה מלמד בדיוק את זה.
+      </p>
+      <div class="hooks-grid">
+        <div class="hook-card">
+          <div class="hook-icon">🚀</div>
+          <h3>מהירות פיתוח ×10</h3>
+          <p>השתמש ב-AI כ"מכפיל כוח" ובנה פיצ'רים מלאים ב-fraction של הזמן הרגיל.</p>
+        </div>
+        <div class="hook-card">
+          <div class="hook-icon">🏗️</div>
+          <h3>חשיבה כמהנדס</h3>
+          <p>למד לתכנן מערכות, ארכיטקטורות ופתרונות — לא רק לכתוב קוד.</p>
+        </div>
+        <div class="hook-card">
+          <div class="hook-icon">📋</div>
+          <h3>ניהול פרויקט מלא</h3>
+          <p>שלוט ב-SDLC מלא — מאידאה ועד פריסה — כפרויקט-מנג'ר וכמפתח יחד.</p>
+        </div>
+        <div class="hook-card">
+          <div class="hook-icon">🎯</div>
+          <h3>דמו חי</h3>
+          <p>ראה את כל התהליך בזמן אמת: spec → design → implementation → verification.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- AGENDA -->
+  <section id="agenda">
+    <div class="container">
+      <p class="section-label">סדר יום</p>
+      <h2>מה נכסה בוובינר</h2>
+      <p class="lead">תוכן מעשי המשלב תיאוריה קצרה עם דמו חי ב-IDE.</p>
+      <ul class="agenda-list">
+        <li>
+          <div class="agenda-num">1</div>
+          <div class="agenda-text">
+            <strong>המציאות החדשה — AI כלי לא מחליף</strong>
+            <span>מה השתנה ולמה חשיבת המפתח הקלאסית כבר לא מספיקה</span>
+          </div>
+        </li>
+        <li>
+          <div class="agenda-num">2</div>
+          <div class="agenda-text">
+            <strong>Mindset שינוי — מהנדס + Project Manager</strong>
+            <span>איך לחשוב כמהנדס מערכות וכמנהל פרויקט במקביל</span>
+          </div>
+        </li>
+        <li>
+          <div class="agenda-num">3</div>
+          <div class="agenda-text">
+            <strong>SDLC — 9 שלבים מאידאה ועד תחזוקה</strong>
+            <span>תהליך הפיתוח המסורתי ואיך AI משתלב בכל שלב</span>
+          </div>
+        </li>
+        <li>
+          <div class="agenda-num">4</div>
+          <div class="agenda-text">
+            <strong>דמו חי — בניית אפליקציה מלאה עם AI</strong>
+            <span>מ-spec ועד קוד רץ: מערכת טיקטים עם React + Node.js</span>
+          </div>
+        </li>
+        <li>
+          <div class="agenda-num">5</div>
+          <div class="agenda-text">
+            <strong>שאלות ותשובות + Takeaways</strong>
+            <span>סיכום, כלים מומלצים ומה לעשות מחר בבוקר</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- FOR WHOM -->
+  <section id="audience">
+    <div class="container">
+      <p class="section-label">למי מיועד הוובינר</p>
+      <h2>בדיוק בשבילך אם אתה...</h2>
+      <div class="audience-grid">
+        <div class="audience-card">
+          <div class="icon">🎓</div>
+          <h3>סטודנט להנדסת תוכנה</h3>
+          <p>רוצה להיכנס לתעשייה עם יכולות שמתחרים חמש שנות ניסיון לא מביאים</p>
+        </div>
+        <div class="audience-card">
+          <div class="icon">💼</div>
+          <h3>מפתח Junior</h3>
+          <p>רוצה לקפוץ שלבים בקריירה ולעבוד ברמת Senior בעזרת AI</p>
+        </div>
+        <div class="audience-card">
+          <div class="icon">🔄</div>
+          <h3>מי שעושה Bootcamp</h3>
+          <p>מחפש את הכלים שיהפכו את הידע שרכשת לפרויקטים אמיתיים מהר יותר</p>
+        </div>
+        <div class="audience-card">
+          <div class="icon">🧑‍💻</div>
+          <h3>מפתח שרוצה להתעדכן</h3>
+          <p>מבין שהשוק משתנה ורוצה להישאר רלוונטי עם הכלים החדשים</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- REGISTER -->
+  <section id="register">
+    <div class="container">
+      <div class="register-box">
+        <p class="section-label" style="text-align:center">הרשמה</p>
+        <h2>שמור את מקומך עכשיו</h2>
+        <p>
+          הוובינר <span class="highlight">חינמי לחלוטין</span> ומספר המקומות מוגבל.
+          הירשם עכשיו ותקבל תזכורת לפני האירוע.
+        </p>
+        <a
+          href="https://forms.gle/PLACEHOLDER_FORM_ID"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="register-link"
+        >
+          הרשמה לוובינר &rarr;
+        </a>
+        <p class="register-note">* הרשמה דרך Google Forms · אין תשלום · אין ספאם</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>AI-Assisted Software Development Webinar &copy; 2026 · כל הזכויות שמורות</p>
+  </footer>
+
+</body>
+</html>
